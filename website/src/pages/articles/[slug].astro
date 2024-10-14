@@ -1,0 +1,24 @@
+---
+import Layout from "../../Layout.astro";
+
+import { fetchArticleBySlug } from "../../articles";
+
+const { env } = Astro.locals.runtime;
+
+const { slug } = Astro.params;
+
+const article = await fetchArticleBySlug(env, slug!);
+---
+<Layout>
+  <article class="flex flex-col mx-auto max-w-[780px]">
+    <div
+      class="px-2 font-libre text-neutral-300 prose-sm lg:prose-lg prose-img:rounded-lg prose-img:aspect-video prose-blockquote:italic"
+    >
+      <h1>
+        {article.title}
+      </h1>
+
+      <div set:html={article.content}></div>
+    </div>
+  </article>
+</Layout>

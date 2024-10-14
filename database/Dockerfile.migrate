@@ -1,0 +1,7 @@
+FROM rustlang/rust:nightly-slim
+
+COPY ./migrations ./migrations
+
+RUN cargo install sqlx-cli --no-default-features --features rustls,postgres
+
+CMD ["sqlx", "migrate", "run"]

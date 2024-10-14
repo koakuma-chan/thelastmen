@@ -1,0 +1,13 @@
+fmt:
+  dprint fmt --config ../dprint.json
+
+start:
+    docker run \
+      --name thelastmen-development-postgresql \
+      -e POSTGRES_HOST_AUTH_METHOD=trust \
+      -p 5432:5432 \
+      -d \
+      postgres:latest 
+
+migrate:
+  DATABASE_URL=postgres://postgres@localhost/postgres sqlx migrate run

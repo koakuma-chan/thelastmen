@@ -1,0 +1,2 @@
+fmt:
+  dprint fmt --config ../dprint.json
