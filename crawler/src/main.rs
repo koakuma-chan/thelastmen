@@ -163,7 +163,7 @@ async fn main() -> Result<()> {
                                   {plot}
                                 </plot>
 
-                                Here are the images that need to be incorporated where appropriate (only retain alt and src, strip other attributes):
+                                Here are the images that need to be incorporated where appropriate:
                                 <images>
                                   {images}
                                 </images>
