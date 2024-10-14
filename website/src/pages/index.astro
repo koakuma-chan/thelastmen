@@ -17,10 +17,8 @@ const articles = await fetchArticles(env);
             class="block group transition duration-300 filter grayscale hover:grayscale-0"
             href={`/articles/${article.slug}`}
           >
-            <div class="relative">
-              <div class="aspect-video">
-                <img src={article.thumbnailUrl} alt="" />
-              </div>
+            <div class="aspect-video">
+              <img src={article.thumbnailUrl} alt="" />
             </div>
 
             <h1
