@@ -1,2 +1,7 @@
 fmt:
   dprint fmt --config ../dprint.json
+
+deploy:
+  rm -rf dist
+  bun run build
+  wrangler pages deploy dist
