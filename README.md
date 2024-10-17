@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/303599b1-a2ca-4370-9703-93bc1f503778)
+
 ## A Nietzschean News Transmutation Engine
 
 This project, born from the abyss of modern information, seeks to elevate the mundane news of the masses into profound proclamations worthy of the Übermensch. Through the alchemy of AI, we transmute the leaden words of cbc.ca into golden aphorisms that would make even Zarathustra nod in approval.
