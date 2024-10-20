@@ -1,13 +1,23 @@
 ---
 import Layout from "../../Layout.astro";
 
+import postgres from "postgres";
+
 import { fetchArticleBySlug } from "../../articles";
 
 const { env } = Astro.locals.runtime;
 
+const sql = postgres({
+  host: env.DB_HOST,
+  port: parseInt(env.DB_PORT, 10),
+  username: env.DB_USER,
+  password: env.DB_PASSWORD,
+  database: env.DB_DATABASE,
+});
+
 const { slug } = Astro.params;
 
-const article = await fetchArticleBySlug(env, slug!);
+const article = await fetchArticleBySlug(sql, slug!);
 ---
 <Layout>
   <article class="flex flex-col mx-auto max-w-[780px]">

@@ -1,34 +1,113 @@
 ---
-import Layout from "../Layout.astro";
+import postgres from "postgres";
 
-import { fetchArticles } from "../articles";
+import { fetchArticleCount, fetchArticles } from "../articles";
+
+import Layout from "../Layout.astro";
 
 const { env } = Astro.locals.runtime;
 
-const articles = await fetchArticles(env);
+const sql = postgres({
+  host: env.DB_HOST,
+  port: parseInt(env.DB_PORT, 10),
+  username: env.DB_USER,
+  password: env.DB_PASSWORD,
+  database: env.DB_DATABASE,
+});
+
+const articleCount = await fetchArticleCount(sql);
+
+const page = parseInt(Astro.url.searchParams.get("page")) || 0;
+
+const pageSize = 24;
+
+const totalPages = Math.ceil(articleCount / pageSize);
+
+if (page < 0 || page >= totalPages) {
+  return new Response(null, { status: 404 });
+}
+
+const articles = await fetchArticles(sql, page, pageSize);
+
+/**
+ * Generates an array of page numbers for pagination.
+ * @param {number} currentPage - The current page number.
+ * @param {number} totalPages - The total number of pages.
+ * @returns {number[]} An array of page numbers to display.
+ */
+function generatePagination(currentPage, totalPages) {
+  const delta = 1; // Number of pages to show on each side of the current page
+
+  let range = [];
+
+  range.push(0); // Always include the first page
+
+  for (let i = currentPage - delta; i <= currentPage + delta; i++) {
+    if (i > 0 && i < totalPages - 1) {
+      range.push(i);
+    }
+  }
+
+  range.push(totalPages - 1); // Always include the last page
+
+  // Remove duplicates and sort
+  return [...new Set(range)].sort((a, b) => a - b);
+}
+
+const pagination = generatePagination(page, totalPages);
 ---
 
 <Layout>
-  <ul class="grid gap-4 grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
-    {
-      articles.map(article => (
-        <li>
-          <a
-            class="block group transition duration-300 filter grayscale hover:grayscale-0"
-            href={`/articles/${article.slug}`}
-          >
-            <div class="aspect-video">
-              <img src={article.thumbnailUrl} alt="" />
-            </div>
-
-            <h1
-              class="mt-auto p-4 text-sm font-mono transition opacity-80 group-hover:opacity-100"
+  <div class="px-8">
+    <ul class="grid gap-4 grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
+      {
+        articles.map(article => (
+          <li>
+            <a
+              class="block group transition duration-300 filter grayscale hover:grayscale-0"
+              href={`/articles/${article.slug}`}
             >
-              {article.title}
-            </h1>
-          </a>
-        </li>
+              <div class="aspect-video">
+                <img src={article.thumbnailUrl} alt="" />
+              </div>
+
+              <h1
+                class="mt-auto p-4 text-sm font-mono transition opacity-80 group-hover:opacity-100"
+              >
+                {article.title}
+              </h1>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <div class="flex gap-4 justify-center font-mono text-lg">
+    {
+      pagination.map((p, i) => (
+        <>
+          {
+            i > 0 && pagination[i] - pagination[i - 1] > 1 && (
+              <span class="py-2">...</span>
+            )
+          }
+
+          {
+            page === p ? (
+              <span class="p-2 opacity-45">
+                {p + 1}
+              </span>
+            ) : (
+              <a
+                href={p === 0 ? "/" : `?page=${p}`}
+                class="p-2 transition hover:opacity-80 active:opacity-60"
+              >
+                {p + 1}
+              </a>
+            )
+          }</>
       ))
     }
-  </ul>
+  </div>
 </Layout>
