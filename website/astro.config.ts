@@ -4,8 +4,9 @@ import tailwind from "@astrojs/tailwind";
 
 import cloudflare from "@astrojs/cloudflare";
 
-// https://astro.build/config
-export default defineConfig({
+import type { AstroUserConfig } from "astro";
+
+const config: AstroUserConfig = {
   output: "server",
   integrations: [tailwind()],
   adapter: cloudflare({
@@ -27,4 +28,6 @@ export default defineConfig({
       ],
     },
   },
-});
+};
+
+export default defineConfig(config);
