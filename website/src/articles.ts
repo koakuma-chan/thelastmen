@@ -22,7 +22,7 @@ export async function fetchArticles(
     offset ${page * pageSize} limit ${pageSize}
   `;
 
-  return res.map(row => ({
+  return res.map((row: any) => ({
     slug: row.slug,
     title: row.title,
     thumbnailUrl: row.thumbnail_url,

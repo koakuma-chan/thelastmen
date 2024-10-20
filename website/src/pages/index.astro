@@ -17,7 +17,7 @@ const sql = postgres({
 
 const articleCount = await fetchArticleCount(sql);
 
-const page = parseInt(Astro.url.searchParams.get("page")) || 0;
+const page = parseInt(Astro.url.searchParams.get("page") ?? "0") || 0;
 
 const pageSize = 24;
 
@@ -31,11 +31,11 @@ const articles = await fetchArticles(sql, page, pageSize);
 
 /**
  * Generates an array of page numbers for pagination.
- * @param {number} currentPage - The current page number.
- * @param {number} totalPages - The total number of pages.
- * @returns {number[]} An array of page numbers to display.
+ * @param currentPage - The current page number.
+ * @param totalPages - The total number of pages.
+ * @returns An array of page numbers to display.
  */
-function generatePagination(currentPage, totalPages) {
+function generatePagination(currentPage: number, totalPages: number) {
   const delta = 1; // Number of pages to show on each side of the current page
 
   let range = [];
