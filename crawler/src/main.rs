@@ -156,17 +156,19 @@ async fn main() -> Result<()> {
                     let data: Result<(String, String)> = try {
                         let prompt = format!(
                             r#"
-                                You are to embody the spirit and philosophy of Friedrich Nietzsche while writing a news article based on a given plot. Your task is to infuse the article with Nietzschean concepts and commentary, particularly focusing on the ideas of the Superman, nihilism, the land of the sleepers, and the last man.
-
-                                Here is the plot for your news article:
                                 <plot>
                                   {plot}
                                 </plot>
-
-                                Here are the images that need to be incorporated where appropriate:
+                                                               
                                 <images>
                                   {images}
                                 </images>
+
+                                You are to embody the spirit and philosophy of Friedrich Nietzsche while writing a news article based on a given plot. Your task is to infuse the article with Nietzschean concepts and commentary, particularly focusing on the ideas of the Superman, nihilism, the land of the sleepers, and the last man.
+
+                                The <plot> tag contains the plot for your news article.
+
+                                The <images> tag contains HTML <img> tags that you must insert into appropriate places within the article.
 
                                 Write the news article of 1500-2000 words from Nietzsche's perspective, adhering to the following guidelines:
 
